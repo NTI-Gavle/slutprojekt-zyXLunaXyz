@@ -1,62 +1,74 @@
-/* Header */
-.site-header {
-    background-color: #333;
-    color: #fff;
-    padding: 15px 0;
+:root {
+    --z-white: #ffffff;
+    --z-black: #000000;
+    --z-blue: #1D9BF0;
+    --z-discord: #5865F2;
+    --z-border: #2f3336;
 }
 
-.header-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+* {
+    box-sizing: border-box;
 }
 
-.site-title a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1.5em;
-}
-
-/* Navigation */
-.site-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 15px;
+body {
+    background-color: var(--z-black);
+    color: var(--z-white);
     margin: 0;
-    padding: 0;
+}
+.z-logo-font{
+    font-family: "Jacques Francois Shadow", serif;
 }
 
-.site-nav a {
-    color: #fff;
-    text-decoration: none;
+.z-input {
+    width: 100%;
+    border-radius: 9999px;
+    border: 1px solid rgb(64 64 64);
+    background-color: #000000;
+    color: #ffffff;
+    padding: 0.9rem 1rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.site-nav a:hover {
-    color: #FFD700; /* Optional hover effect */
+.z-input:focus {
+    border-color: var(--z-blue);
+    box-shadow: 0 0 0 1px var(--z-blue);
 }
 
-/* Main content */
-.main-content {
-    max-width: 1000px;
-    margin: 20px auto;
+.z-auth-card {
+    border: 1px solid #202327;
+    background: #000000;
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.02);
 }
 
-/* Footer */
-.site-footer {
-    text-align: center;
-    padding: 20px;
-    background-color: #f0f0f0;
-    margin-top: 40px;
+.z-auth-button {
+    width: 100%;
+    border-radius: 9999px;
+    padding: 0.85rem 1rem;
+    font-weight: 700;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    animation: dropdownFade 0.2s ease;
 }
 
-.site-footer a {
-    color: #333;
-    text-decoration: none;
-    margin: 0 5px;
+.z-auth-button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
 }
 
-.site-footer a:hover {
-    text-decoration: underline;
+@keyframes dropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.z-discord-icon {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
 }
