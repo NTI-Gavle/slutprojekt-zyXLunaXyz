@@ -72,3 +72,94 @@ body {
     height: 22px;
     fill: currentColor;
 }
+
+.z-nav-link{
+    display: flex;
+    align-items: center;
+      gap: 1rem;
+    border-radius: 9999px;
+    padding: 0.8rem 1rem;
+    transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.z-nav-link:hover {
+    background-color: #111111;
+    transform: translateY(-1px);
+    color: var(--z-blue);
+}
+
+.z-nav-icon {
+    width: 1.65rem;
+    height: 1.65rem;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+.z-mobile-nav-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0;
+    color: white;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.z-mobile-nav-link:hover {
+    color: var(--z-blue);
+    background-color: #111111;
+}
+
+.z-mobile-nav-icon {
+    width: 1.6rem;
+    height: 1.6rem;
+    fill: currentColor;
+}
+
+.z-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: currentColor;
+    border-radius: 9999px;
+    padding: 0.45rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.z-icon-button:hover {
+    background-color: rgba(29, 155, 240, 0.12);
+    color: var(--z-blue);
+}
+
+.z-post-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.z-post-menu-button {
+    color: #737373;
+    border-radius: 9999px;
+    padding: 0.35rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.z-post-menu-button:hover {
+    color: white;
+    background-color: #111111;
+}
+
+.z-action-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+.z-action-icon-small {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: currentColor;
+    flex-shrink: 0;
+}

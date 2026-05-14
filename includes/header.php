@@ -14,8 +14,8 @@ $pageTitle = $pageTitle ?? "Z"
     <title><?= e($pageTitle) ?></title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jacques+Francois+Shadow&display=swap">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/css/styles.css">
-    <script src="/js/app.js" defer></script>
+    <link rel="stylesheet" href="css/styles.css?v<?= time()?>">
+    <script src="js/app.js?v=<?= time() ?>" defer></script>
 </head>
 <body="bg-black text-white min-h-screen">
     

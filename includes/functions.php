@@ -21,5 +21,17 @@ function requireLogin(): void
         redirect('login.php');
     }
 }
+
+function isAdmin(): bool
+{
+    return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+}
+
+function requireAdmin(): void
+{
+    if (!isAdmin()) {
+        redirect('index.php');
+    }
+}
 ?>
 
