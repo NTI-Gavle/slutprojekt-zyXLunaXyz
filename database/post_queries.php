@@ -27,6 +27,7 @@ function getAllPosts(PDO $dbconn): array
             users.username,
             users.display_name,
             users.profile_image,
+            users.role,
             COUNT(DISTINCT likes.id) AS like_count,
             COUNT(DISTINCT replies.id) AS reply_count
         FROM posts
@@ -40,4 +41,27 @@ function getAllPosts(PDO $dbconn): array
     $stmt = $dbconn->query($sql);
 
     return $stmt->fetchAll();
+}
+
+function deletePost(PDO $dbconn, int $postId, int $userId, bool $isAdmin): bool
+{
+    if ($isAdmin) {
+        $sql = "DELETE FROM posts WHERE id = :post_id";
+        $stmt = $dbconn->prepare($sql);
+
+        return $stmt->execute([
+            ':post_id' => $postId
+        ]);
+    }
+
+    $sql = "DELETE FROM posts 
+            WHERE id = :post_id 
+            AND user_id = :user_id";
+
+    $stmt = $dbconn->prepare($sql);
+
+    return $stmt->execute([
+        ':post_id' => $postId,
+        ':user_id' => $userId
+    ]);
 }

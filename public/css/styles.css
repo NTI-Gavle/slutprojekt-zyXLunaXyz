@@ -163,3 +163,41 @@ body {
     fill: currentColor;
     flex-shrink: 0;
 }
+
+.z-post-menu-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: left;
+    transition: background-color 0.2s ease;
+}
+
+.z-post-menu-item svg {
+    fill: currentColor;
+}
+
+.z-admin-rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background-color: var(--z-discord);
+    color: var(--z-black);
+    border:var(--z-blue);
+    padding: 0.1rem 0.45rem;
+    font-size: 0.62rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+}
+
+.z-admin-rank-nav {
+    margin-top: 0.4rem;
+    transform: translateY(-2px);
+}

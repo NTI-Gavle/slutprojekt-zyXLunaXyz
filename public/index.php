@@ -90,18 +90,88 @@ $posts = getAllPosts($dbconn);
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center justify-between gap-3">
                                 <div class="min-w-0">
-                                    <span class="font-bold"><?= e($post['display_name']) ?></span>
-                                    <span class="text-neutral-500 text-sm">@<?= e($post['username']) ?></span>
-                                    <span class="text-neutral-500">·</span>
-                                    <span class="text-neutral-500 text-sm"><?= e(date('M j', strtotime($post['created_at']))) ?></span>
-                                </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="font-bold leading-tight"><?= e($post['display_name']) ?></span>
 
-                                <button class="z-post-menu-button" type="button" title="More">
-                                    <svg class="z-action-icon-small" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M5 12a2 2 0 1 1-2-2a2 2 0 0 1 2 2zm9 0a2 2 0 1 1-2-2a2 2 0 0 1 2 2zm9 0a2 2 0 1 1-2-2a2 2 0 0 1 2 2z"/>
-                                    </svg>
-                                </button>
+                                        <?php if (($post['role'] ?? '') === 'admin'): ?>
+                                            <span class="z-admin-rank">Admin</span>
+                                        <?php endif; ?>
+
+                                        <span class="text-neutral-500">·</span>
+                                        <span class="text-neutral-500 text-sm"><?= e(date('M j', strtotime($post['created_at']))) ?></span>
+                                    </div>
+
+                                    <p class="text-neutral-500 text-sm leading-tight">
+                                        @<?= e($post['username']) ?>
+                                    </p>
                             </div>
+
+                                    <div class="relative">
+                                        <button 
+                                            class="z-post-menu-button" 
+                                            type="button" 
+                                            title="More"
+                                            data-post-menu-toggle="postMenu<?= (int) $post['id'] ?>"
+                                        >
+                                            <svg class="z-action-icon-small" viewBox="0 0 24 24" aria-hidden="true">
+                                                <path d="M5 12a2 2 0 1 1-2-2a2 2 0 0 1 2 2zm9 0a2 2 0 1 1-2-2a2 2 0 0 1 2 2zm9 0a2 2 0 1 1-2-2a2 2 0 0 1 2 2z"/>
+                                            </svg>
+                                        </button>
+
+                                        <div 
+                                            id="postMenu<?= (int) $post['id'] ?>" 
+                                            data-post-menu
+                                            class="hidden absolute right-0 top-9 z-30 w-48 rounded-2xl border border-neutral-800 bg-black shadow-xl overflow-hidden"
+                                        >
+                                                <?php
+                                                    $isOwnPost = (int) $post['user_id'] === (int) $_SESSION['user_id'];
+                                                    $canDeletePost = $isOwnPost || isAdmin();
+                                                    $canDeleteUser = isAdmin() && !$isOwnPost;
+                                                ?>
+
+                                                <?php if ($canDeletePost): ?>
+                                                    <form action="delete_post.php" method="post" onsubmit="return confirm('Delete this post?');">
+                                                        <input type="hidden" name="post_id" value="<?= (int) $post['id'] ?>">
+
+                                                        <button 
+                                                            type="submit" 
+                                                            class="z-post-menu-item text-red-400 hover:bg-red-500/10"
+                                                        >
+                                                            <svg class="z-action-icon-small" viewBox="0 0 24 24" aria-hidden="true">
+                                                                <path d="M9 3h6a1 1 0 0 1 1 1v1h4a1 1 0 1 1 0 2h-1v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4a1 1 0 0 1 0-2h4V4a1 1 0 0 1 1-1zm1 2h4V5h-4v0zM7 7v13h10V7H7zm3 3a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1zm4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1z"/>
+                                                            </svg>
+
+                                                            <span>Delete post</span>
+                                                        </button>
+                                                    </form>
+                                                <?php endif; ?>
+
+                                                <?php if ($canDeleteUser): ?>
+                                                    <form action="delete_user.php" method="post" onsubmit="return confirm('Remove this user and all their posts?');">
+                                                        <input type="hidden" name="user_id" value="<?= (int) $post['user_id'] ?>">
+
+                                                        <button 
+                                                            type="submit" 
+                                                            class="z-post-menu-item text-red-500 hover:bg-red-500/10"
+                                                        >
+                                                            <svg class="z-action-icon-small" viewBox="0 0 24 24" aria-hidden="true">
+                                                                <path d="M12 12a5 5 0 1 0-5-5a5 5 0 0 0 5 5zm0 2c-5.05 0-9 2.67-9 6.08A1.92 1.92 0 0 0 4.92 22h8.5A7.97 7.97 0 0 1 12 17.5A7.86 7.86 0 0 1 13.1 14H12zm6.5 1a3.5 3.5 0 1 0 3.5 3.5A3.5 3.5 0 0 0 18.5 15zm1.5 4.5h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2z"/>
+                                                            </svg>
+
+                                                            <span>Remove user</span>
+                                                        </button>
+                                                    </form>
+                                                <?php endif; ?>
+
+                                                <?php if (!$canDeletePost && !$canDeleteUser): ?>
+                                                    <div class="px-4 py-3 text-sm text-neutral-500">
+                                                        No actions available
+                                                    </div>
+                                                <?php endif; ?>
+                                        </div>
+
+                            </div>
+</div>
 
                             <p class="mt-2 whitespace-pre-wrap break-words">
                                 <?= e($post['content']) ?>
