@@ -24,6 +24,29 @@ if ($userId === (int) $_SESSION['user_id']) {
     redirect('index.php');
 }
 
-deleteUserById($dbconn, $userId);
+$currentRole = $_SESSION['role'] ?? 'user';
+$targetRole = getUserRoleById($dbconn, $userId);
+
+if ($targetRole === null) {
+    redirect('index.php');
+}
+
+if ($currentRole === 'owner') {
+    if ($targetRole === 'owner') {
+        redirect('index.php');
+    }
+
+    deleteUserById($dbconn, $userId);
+    redirect('index.php');
+}
+
+if ($currentRole === 'admin') {
+    if ($targetRole !== 'user') {
+        redirect('index.php');
+    }
+
+    deleteUserById($dbconn, $userId);
+    redirect('index.php');
+}
 
 redirect('index.php');

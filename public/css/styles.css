@@ -4,6 +4,7 @@
     --z-blue: #1D9BF0;
     --z-discord: #5865F2;
     --z-border: #2f3336;
+    --z-OWNER: #80091b;
 }
 
 * {
@@ -200,4 +201,28 @@ body {
 .z-admin-rank-nav {
     margin-top: 0.4rem;
     transform: translateY(-2px);
+}
+
+.z-post-liked {
+    color: #ef4444;
+}
+
+.z-post-liked:hover {
+    color: #f87171;
+}
+
+.z-owner-rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: var(--z-OWNER);
+    color: #000000;
+    padding: 0.1rem 0.45rem;
+    font-size: 0.62rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
 }

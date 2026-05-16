@@ -7,7 +7,7 @@ require_once __DIR__ . '/../includes/header.php';
 
 requireLogin();
 
-$posts = getAllPosts($dbconn);
+$posts = getAllPosts($dbconn, (int) $_SESSION['user_id']);
 
 ?>
 
@@ -93,7 +93,9 @@ $posts = getAllPosts($dbconn);
                                     <div class="flex items-center gap-1.5">
                                         <span class="font-bold leading-tight"><?= e($post['display_name']) ?></span>
 
-                                        <?php if (($post['role'] ?? '') === 'admin'): ?>
+                                        <?php if (($post['role'] ?? '') === 'owner'): ?>
+                                            <span class="z-owner-rank">Owner</span>
+                                        <?php elseif (($post['role'] ?? '') === 'admin'): ?>
                                             <span class="z-admin-rank">Admin</span>
                                         <?php endif; ?>
 
@@ -123,10 +125,27 @@ $posts = getAllPosts($dbconn);
                                             data-post-menu
                                             class="hidden absolute right-0 top-9 z-30 w-48 rounded-2xl border border-neutral-800 bg-black shadow-xl overflow-hidden"
                                         >
-                                                <?php
+                                              <?php
                                                     $isOwnPost = (int) $post['user_id'] === (int) $_SESSION['user_id'];
-                                                    $canDeletePost = $isOwnPost || isAdmin();
-                                                    $canDeleteUser = isAdmin() && !$isOwnPost;
+                                                    $currentRole = $_SESSION['role'] ?? 'user';
+                                                    $targetRole = $post['role'] ?? 'user';
+
+                                                    $canDeletePost = false;
+                                                    $canDeleteUser = false;
+
+                                                    if ($isOwnPost){
+                                                        $canDeletePost = true;
+                                                    }
+
+                                                    if (!$isOwnPost && $currentRole === 'owner' && $targetRole !== 'owner') {
+                                                        $canDeleteUser = true;
+                                                        $canDeletePost = true;
+                                                    }
+
+                                                    if (!$isOwnPost && $currentRole === 'admin' && $targetRole === 'user') {
+                                                        $canDeleteUser = true;
+                                                        $canDeletePost = true;
+                                                    }
                                                 ?>
 
                                                 <?php if ($canDeletePost): ?>
@@ -200,12 +219,27 @@ $posts = getAllPosts($dbconn);
                                     <span>0</span>
                                 </button>
 
-                                <button class="z-post-action hover:text-red-500" type="button" title="Like">
-                                    <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5A5.45 5.45 0 0 1 7.5 3A5.99 5.99 0 0 1 12 5.09A5.99 5.99 0 0 1 16.5 3A5.45 5.45 0 0 1 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35zM7.5 5A3.45 3.45 0 0 0 4 8.5c0 2.86 2.85 5.44 7.9 10.03l.1.09l.1-.09C17.15 13.94 20 11.36 20 8.5A3.45 3.45 0 0 0 16.5 5c-1.74 0-3.41 1.02-4.22 2.6h-.56C10.91 6.02 9.24 5 7.5 5z"/>
-                                    </svg>
+                            <form action="like_post.php" method="post" class="inline">
+                                <input type="hidden" name="post_id" value="<?= (int) $post['id'] ?>">
+
+                                <button
+                                    class="z-post-action <?= ((int) $post['liked_by_current_user'] === 1) ? 'z-post-liked' : 'hover:text-red-500' ?>"
+                                    type="submit"
+                                    title="Like"
+                                >
+                                    <?php if ((int) $post['liked_by_current_user'] === 1): ?>
+                                        <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5A5.45 5.45 0 0 1 7.5 3A5.99 5.99 0 0 1 12 5.09A5.99 5.99 0 0 1 16.5 3A5.45 5.45 0 0 1 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                    <?php else: ?>
+                                        <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5A5.45 5.45 0 0 1 7.5 3A5.99 5.99 0 0 1 12 5.09A5.99 5.99 0 0 1 16.5 3A5.45 5.45 0 0 1 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35zM7.5 5A3.45 3.45 0 0 0 4 8.5c0 2.86 2.85 5.44 7.9 10.03l.1.09l.1-.09C17.15 13.94 20 11.36 20 8.5A3.45 3.45 0 0 0 16.5 5c-1.74 0-3.41 1.02-4.22 2.6h-.56C10.91 6.02 9.24 5 7.5 5z"/>
+                                        </svg>
+                                    <?php endif; ?>
+
                                     <span><?= (int) $post['like_count'] ?></span>
                                 </button>
+                            </form>
 
                                 <button class="z-post-action hover:text-sky-500" type="button" title="Share">
                                     <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">

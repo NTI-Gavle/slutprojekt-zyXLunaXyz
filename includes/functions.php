@@ -24,14 +24,24 @@ function requireLogin(): void
 
 function isAdmin(): bool
 {
-    return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+    return isset($_SESSION['role']) && ($_SESSION['role'] === 'admin' ||  $_SESSION['role'] === 'owner');
 }
 
 function requireAdmin(): void
 {
-    if (!isAdmin()) {
+    if (!canModerateUsers()) {
         redirect('index.php');
     }
+}
+
+function isOwner(): bool
+{
+    return isset($_SESSION['role']) && $_SESSION['role'] === 'owner';
+}
+
+function canModerateUsers(): bool
+{
+    return isAdmin() || isOwner();
 }
 ?>
 

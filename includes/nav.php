@@ -72,7 +72,9 @@
                             </p>
                         </div>
 
-                        <?php if (isAdmin()): ?>
+                        <?php if (isOwner()): ?>
+                            <span class="z-owner-rank z-admin-rank-nav">Owner</span>
+                        <?php elseif (($_SESSION['role'] ?? '') === 'admin'): ?>
                             <span class="z-admin-rank z-admin-rank-nav">Admin</span>
                         <?php endif; ?>
                     </div>
