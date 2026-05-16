@@ -54,4 +54,12 @@
             </div>
         </div>
     </section>
+        <canvas
+            id="zClockCanvas"
+            width="260"
+            height="260"
+            class="z-clock-canvas mb-4"
+        >
+        </canvas>
+    </section>
 </aside>

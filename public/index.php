@@ -83,15 +83,24 @@ $posts = getAllPosts($dbconn, (int) $_SESSION['user_id']);
             <?php foreach ($posts as $post): ?>
                 <article class="border-b border-neutral-800 px-4 py-4 hover:bg-neutral-950 transition">
                     <div class="flex gap-3">
-                        <div class="w-11 h-11 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center shrink-0">
-                            <span class="font-bold"><?= e(substr($post['display_name'], 0, 1)) ?></span>
-                        </div>
+
+                        <a
+                             href="profile.php?id=<?= (int) $post['user_id'] ?>"
+                             class="w-11 h-11 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center shrink-0 hover:border-sky-500 transition overflow-hidden"
+                        >
+                             <span class="font-bold"><?= e(substr($post['display_name'], 0, 1)) ?></span>
+                        </a>
 
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center justify-between gap-3">
                                 <div class="min-w-0">
                                     <div class="flex items-center gap-1.5">
-                                        <span class="font-bold leading-tight"><?= e($post['display_name']) ?></span>
+                                        <a
+                                            href="profile.php?id=<?= (int) $post['user_id'] ?>"
+                                            class="font-bold leading-tight hover:underline"
+                                        >
+                                             <?= e($post['display_name']) ?>
+                                        </a>
 
                                         <?php if (($post['role'] ?? '') === 'owner'): ?>
                                             <span class="z-owner-rank">Owner</span>
@@ -103,9 +112,12 @@ $posts = getAllPosts($dbconn, (int) $_SESSION['user_id']);
                                         <span class="text-neutral-500 text-sm"><?= e(date('M j', strtotime($post['created_at']))) ?></span>
                                     </div>
 
-                                    <p class="text-neutral-500 text-sm leading-tight">
+                                    <a
+                                        href="profile.php?id=<?= (int) $post['user_id'] ?>"
+                                        class="block text-neutral-500 text-sm leading-tight"
+                                    >
                                         @<?= e($post['username']) ?>
-                                    </p>
+                                    </a>
                             </div>
 
                                     <div class="relative">
@@ -192,9 +204,7 @@ $posts = getAllPosts($dbconn, (int) $_SESSION['user_id']);
                             </div>
 </div>
 
-                            <p class="mt-2 whitespace-pre-wrap break-words">
-                                <?= e($post['content']) ?>
-                            </p>
+                            <p class="mt-2 whitespace-pre-wrap break-words text-left"><?= e($post['content']) ?></p>
 
                             <?php if (!empty($post['image_url'])): ?>
                                 <img

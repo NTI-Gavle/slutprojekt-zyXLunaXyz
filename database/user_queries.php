@@ -56,3 +56,47 @@ function getUserById(PDO $dbconn, int $id): ?array
 
     return $user ?: null;
 }
+
+function getUserStats(PDO $dbconn, int $userId): array
+{
+    $sql = "
+        SELECT
+            COUNT(DISTINCT posts.id) AS post_count,
+            COUNT(DISTINCT likes.id) AS like_count
+        FROM users
+        LEFT JOIN posts ON users.id = posts.user_id
+        LEFT JOIN likes ON users.id = likes.user_id
+        WHERE users.id = :user_id
+        GROUP BY users.id
+    ";
+
+    $stmt = $dbconn->prepare($sql);
+    $stmt->execute([
+        ':user_id' => $userId
+    ]);
+
+    $stats = $stmt->fetch();
+
+    return $stats ?: [
+        'post_count' => 0,
+        'like_count' => 0
+    ];
+}
+
+function updateUserProfile(PDO $dbconn, int $userId, string $displayName, string $bio): bool
+{
+    $sql = "
+        UPDATE users
+        SET display_name = :display_name,
+            bio = :bio
+        WHERE id = :user_id
+    ";
+
+    $stmt = $dbconn->prepare($sql);
+
+    return $stmt->execute([
+        ':display_name' => $displayName,
+        ':bio' => $bio,
+        ':user_id' => $userId
+    ]);
+}

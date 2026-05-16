@@ -16,24 +16,6 @@
             </li>
 
             <li>
-                <a href="explore.php" class="z-nav-link">
-                    <svg class="z-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M10.5 3a7.5 7.5 0 0 1 5.96 12.06l4.24 4.24a1 1 0 0 1-1.4 1.4l-4.24-4.24A7.5 7.5 0 1 1 10.5 3zm0 2a5.5 5.5 0 1 0 0 11a5.5 5.5 0 0 0 0-11z"/>
-                    </svg>
-                    <span>Explore</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="notifications.php" class="z-nav-link">
-                    <svg class="z-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12 22a2.75 2.75 0 0 0 2.68-2.13H9.32A2.75 2.75 0 0 0 12 22zm7-6.5l-1.6-2.1V9a5.41 5.41 0 0 0-4.3-5.3V2.75a1.1 1.1 0 0 0-2.2 0v.95A5.41 5.41 0 0 0 6.6 9v4.4L5 15.5a1.5 1.5 0 0 0 1.2 2.4h11.6a1.5 1.5 0 0 0 1.2-2.4z"/>
-                    </svg>
-                    <span>Notifications</span>
-                </a>
-            </li>
-
-            <li>
                 <a href="chat.php" class="z-nav-link">
                     <svg class="z-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M4 5a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H9.2l-4.07 3.39A1.3 1.3 0 0 1 3 18.39V5zm3-1a1 1 0 0 0-1 1v11.25L8.22 14.4A2 2 0 0 1 9.5 14H17a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H7z"/>
@@ -55,6 +37,7 @@
     </div>
 
     <div class="pb-4">
+        <a href="profile.php">
         <div class="flex items-center gap-3 mb-4">
             <div class="w-10 h-10 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center overflow-hidden">
                 <span class="font-bold"><?= e(substr($_SESSION['display_name'] ?? 'Z', 0, 1)) ?></span>
@@ -80,6 +63,7 @@
                     </div>
                 </div>
         </div>
+        </a>
         <a href="logout.php" class="block text-center rounded-full border border-neutral-700 py-2 hover:bg-neutral-900 transition">
             Logout
         </a>
@@ -87,27 +71,11 @@
 </nav>
 
 <nav class="lg:hidden fixed bottom-0 left-0 right-0 border-t border-neutral-800 bg-black z-50">
-    <ul class="grid grid-cols-5 text-center">
+    <ul class="grid grid-cols-3 text-center">
         <li>
             <a href="index.php" class="z-mobile-nav-link">
                 <svg class="z-mobile-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M3 10.75L12 3l9 7.75V21a1 1 0 0 1-1 1h-5.5a1 1 0 0 1-1-1v-5.5h-3V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V10.75z"/>
-                </svg>
-            </a>
-        </li>
-
-        <li>
-            <a href="explore.php" class="z-mobile-nav-link">
-                <svg class="z-mobile-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M10.5 3a7.5 7.5 0 0 1 5.96 12.06l4.24 4.24a1 1 0 0 1-1.4 1.4l-4.24-4.24A7.5 7.5 0 1 1 10.5 3zm0 2a5.5 5.5 0 1 0 0 11a5.5 5.5 0 0 0 0-11z"/>
-                </svg>
-            </a>
-        </li>
-
-        <li>
-            <a href="notifications.php" class="z-mobile-nav-link">
-                <svg class="z-mobile-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 22a2.75 2.75 0 0 0 2.68-2.13H9.32A2.75 2.75 0 0 0 12 22zm7-6.5l-1.6-2.1V9a5.41 5.41 0 0 0-4.3-5.3V2.75a1.1 1.1 0 0 0-2.2 0v.95A5.41 5.41 0 0 0 6.6 9v4.4L5 15.5a1.5 1.5 0 0 0 1.2 2.4h11.6a1.5 1.5 0 0 0 1.2-2.4z"/>
                 </svg>
             </a>
         </li>
