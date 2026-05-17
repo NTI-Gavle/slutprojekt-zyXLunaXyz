@@ -1,7 +1,7 @@
 <?php
 
 $pageTitle = 'Profile - Z';
-
+require_once __DIR__ . '/../database/follow_queries.php';
 require_once __DIR__ . '/../database/user_queries.php';
 require_once __DIR__ . '/../database/post_queries.php';
 require_once __DIR__ . '/../includes/header.php';
@@ -19,6 +19,12 @@ if (!$user) {
 
 $isOwnProfile = $profileUserId === $loggedInUserId;
 $stats = getUserStats($dbconn, $profileUserId);
+$followStats = getFollowStats($dbconn, $profileUserId);
+$isFollowingProfile = false;
+
+if (!$isOwnProfile) {
+    $isFollowingProfile = isFollowing($dbconn, $loggedInUserId, $profileUserId);
+}
 
 $error = '';
 $success = '';
@@ -66,15 +72,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isOwnProfile) {
                             <?= e(substr($user['display_name'] ?? 'Z', 0, 1)) ?>
                         </span>
                     </div>
-                <?php if ($isOwnProfile):?>
-                    <button
-                        type="button"
-                        data-auth-toggle="editProfileForm"
-                        class="rounded-full border border-neutral-700 px-5 py-2 font-bold hover:bg-neutral-900 transition"
-                    >
-                        Edit profile
-                    </button>
-                <?php endif; ?>
+                        <?php if ($isOwnProfile): ?>
+                            <button
+                                type="button"
+                                data-auth-toggle="editProfileForm"
+                                class="rounded-full border border-neutral-700 px-5 py-2 font-bold hover:bg-neutral-900 transition"
+                            >
+                                Edit profile
+                            </button>
+                        <?php else: ?>
+                            <form action="follow_user.php" method="post">
+                                <input type="hidden" name="user_id" value="<?= (int) $profileUserId ?>">
+                                <input type="hidden" name="redirect_to" value="profile.php?id=<?= (int) $profileUserId ?>">
+
+                                <button
+                                    type="submit"
+                                    class="<?= $isFollowingProfile ? 'rounded-full border border-neutral-700 px-5 py-2 font-bold hover:bg-red-500/10 hover:text-red-400 transition' : 'rounded-full bg-white text-black px-5 py-2 font-bold hover:opacity-90 transition' ?>"
+                                >
+                                    <?= $isFollowingProfile ? 'Following' : 'Follow' ?>
+                                </button>
+                            </form>
+                        <?php endif; ?>
+
+
                 </div>
 
                 <div class="mt-4">
@@ -107,6 +127,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isOwnProfile) {
                         <p>
                             <span class="font-bold text-white"><?= (int) $stats['like_count'] ?></span>
                             likes given
+                        </p>
+
+                        <p>
+                            <span class="font-bold text-white"><?= (int) $followStats['follower_count'] ?></span>
+                            followers
+                        </p>
+
+                        <p>
+                            <span class="font-bold text-white"><?= (int) $followStats['following_count'] ?></span>
+                            following
                         </p>
                     </div>
                 </div>

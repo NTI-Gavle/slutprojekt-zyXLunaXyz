@@ -15,6 +15,21 @@ function createPost(PDO $dbconn, int $userId, string $content): bool
     ]);
 }
 
+function createPostAndGetId(PDO $dbconn, int $userId, string $content): int
+{
+    $sql = "INSERT INTO posts (user_id, content)
+            VALUES (:user_id, :content)";
+
+    $stmt = $dbconn->prepare($sql);
+
+    $stmt->execute([
+        ':user_id' => $userId,
+        ':content' => $content
+    ]);
+
+    return (int) $dbconn->lastInsertId();
+}
+
 function getAllPosts(PDO $dbconn, int $currentUserId): array
 {
     $sql = "
@@ -146,6 +161,24 @@ function hasLikedPost(PDO $dbconn, int $postId, int $userId): bool
     ]);
 
     return (bool) $stmt->fetch();
+}
+
+function getLikeCount(PDO $dbconn, int $postId): int
+{
+    $sql = "
+        SELECT COUNT(*) AS like_count
+        FROM likes
+        WHERE post_id = :post_id
+    ";
+
+    $stmt = $dbconn->prepare($sql);
+    $stmt->execute([
+        ':post_id' => $postId
+    ]);
+
+    $result = $stmt->fetch();
+
+    return (int) ($result['like_count'] ?? 0);
 }
 
 function toggleLike(PDO $dbconn, int $postId, int $userId): bool

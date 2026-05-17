@@ -1,7 +1,7 @@
 <?php
 
 $pageTitle = 'Home - Z';
-
+require_once __DIR__ . '/../database/follow_queries.php';
 require_once __DIR__ . '/../database/post_queries.php';
 require_once __DIR__ . '/../includes/header.php';
 
@@ -81,6 +81,14 @@ $posts = getAllPosts($dbconn, (int) $_SESSION['user_id']);
             <?php endif; ?>
 
             <?php foreach ($posts as $post): ?>
+                <?php
+                    $isOwnFeedPost = (int) $post['user_id'] === (int) $_SESSION['user_id'];
+                    $isFollowingAuthor = false;
+
+                    if (!$isOwnFeedPost) {
+                        $isFollowingAuthor = isFollowing($dbconn, (int) $_SESSION['user_id'], (int) $post['user_id']);
+                    }
+                ?>
                 <article class="border-b border-neutral-800 px-4 py-4 hover:bg-neutral-950 transition">
                     <div class="flex gap-3">
 
@@ -119,7 +127,21 @@ $posts = getAllPosts($dbconn, (int) $_SESSION['user_id']);
                                         @<?= e($post['username']) ?>
                                     </a>
                             </div>
+                                    <div class="ml-auto flex items-center gap-2 shrink-0">      
+                                    <?php if (!$isOwnFeedPost): ?>
+                                        <form action="follow_user.php" method="post">
+                                            <input type="hidden" name="user_id" value="<?= (int) $post['user_id'] ?>">
+                                            <input type="hidden" name="redirect_to" value="index.php">
 
+                                            <button
+                                                type="submit"
+                                                class="<?= $isFollowingAuthor ? 'rounded-full border border-neutral-700 px-4 py-1 text-sm font-bold hover:bg-red-500/10 hover:text-red-400 transition' : 'rounded-full bg-white text-black px-4 py-1 text-sm font-bold hover:opacity-90 transition' ?>"
+                                            >
+                                                <?= $isFollowingAuthor ? 'Following' : 'Follow' ?>
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
+                                    </div>
                                     <div class="relative">
                                         <button 
                                             class="z-post-menu-button" 
