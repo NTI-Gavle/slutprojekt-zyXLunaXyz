@@ -225,9 +225,10 @@ $posts = getAllPosts($dbconn, (int) $_SESSION['user_id']);
 
                             </div>
 </div>
-
-                            <p class="mt-2 whitespace-pre-wrap break-words text-left"><?= e($post['content']) ?></p>
-
+                            <a
+                                href="post.php?id=<?= (int) $post['id'] ?>"
+                                class="block mt-2 whitespace-pre-wrap break-words text-left hover:text-neutral-300 transition"
+                            ><?= e($post['content']) ?></a>
                             <?php if (!empty($post['image_url'])): ?>
                                 <img
                                     src="<?= e($post['image_url']) ?>"
@@ -237,12 +238,12 @@ $posts = getAllPosts($dbconn, (int) $_SESSION['user_id']);
                             <?php endif; ?>
 
                             <div class="flex items-center justify-between max-w-md mt-4 text-neutral-500">
-                                <button class="z-post-action hover:text-sky-500" type="button" title="Reply">
+                                <a href="post.php?id=<?= (int) $post['id'] ?>" class="z-post-action hover:text-sky-500" title="Reply">
                                     <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">
                                         <path d="M4 5.5A3.5 3.5 0 0 1 7.5 2h9A3.5 3.5 0 0 1 20 5.5v7A3.5 3.5 0 0 1 16.5 16H9l-4.2 4.2A1 1 0 0 1 3 19.5v-14zm3.5-1.5A1.5 1.5 0 0 0 6 5.5v10.6l2.2-2.2A1 1 0 0 1 8.9 13h7.6A1.5 1.5 0 0 0 18 11.5v-6A1.5 1.5 0 0 0 16.5 4h-9z"/>
                                     </svg>
                                     <span><?= (int) $post['reply_count'] ?></span>
-                                </button>
+                                </a>
 
                                 <button class="z-post-action hover:text-green-500" type="button" title="Repost">
                                     <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">
