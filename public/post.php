@@ -75,7 +75,15 @@ if (!$isOwnPost && $currentRole === 'admin' && $targetRole === 'user') {
                     href="profile.php?id=<?= (int) $post['user_id'] ?>"
                     class="w-12 h-12 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center shrink-0 hover:border-sky-500 transition overflow-hidden"
                 >
-                    <span class="font-bold"><?= e(substr($post['display_name'], 0, 1)) ?></span>
+                    <?php if (!empty($post['profile_image'])): ?>
+                        <img
+                            src="<?= e($post['profile_image']) ?>"
+                            alt="Profile picture"
+                            class="w-full h-full object-cover"
+                        >
+                    <?php else: ?>
+                        <span class="font-bold"><?= e(substr($post['display_name'], 0, 1)) ?></span>
+                    <?php endif; ?>
                 </a>
 
                 <div class="flex-1 min-w-0">
@@ -197,19 +205,12 @@ if (!$isOwnPost && $currentRole === 'admin' && $targetRole === 'user') {
                         <?= e(date('H:i · M j, Y', strtotime($post['created_at']))) ?>
                     </div>
 
-                    <div class="flex items-center justify-between max-w-md mt-5 pt-4 border-t border-neutral-800 text-neutral-500">
+                    <div class="flex items-center gap-8 max-w-md mt-5 pt-2 border-t border-neutral-800 text-neutral-500">
                         <button class="z-post-action hover:text-sky-500" type="button" title="Reply">
                             <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M4 5.5A3.5 3.5 0 0 1 7.5 2h9A3.5 3.5 0 0 1 20 5.5v7A3.5 3.5 0 0 1 16.5 16H9l-4.2 4.2A1 1 0 0 1 3 19.5v-14zm3.5-1.5A1.5 1.5 0 0 0 6 5.5v10.6l2.2-2.2A1 1 0 0 1 8.9 13h7.6A1.5 1.5 0 0 0 18 11.5v-6A1.5 1.5 0 0 0 16.5 4h-9z"/>
                             </svg>
                             <span><?= (int) $post['reply_count'] ?></span>
-                        </button>
-
-                        <button class="z-post-action hover:text-green-500" type="button" title="Repost">
-                            <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M7 7h9.2l-2.1-2.1a1 1 0 0 1 1.4-1.4l3.8 3.8a1 1 0 0 1 0 1.4l-3.8 3.8a1 1 0 0 1-1.4-1.4L16.2 9H7a2 2 0 0 0-2 2v1a1 1 0 1 1-2 0v-1a4 4 0 0 1 4-4zm10 10H7.8l2.1 2.1a1 1 0 0 1-1.4 1.4l-3.8-3.8a1 1 0 0 1 0-1.4l3.8-3.8a1 1 0 0 1 1.4 1.4L7.8 15H17a2 2 0 0 0 2-2v-1a1 1 0 1 1 2 0v1a4 4 0 0 1-4 4z"/>
-                            </svg>
-                            <span>0</span>
                         </button>
 
                         <form action="like_post.php" method="post" class="inline">
@@ -234,11 +235,6 @@ if (!$isOwnPost && $currentRole === 'admin' && $targetRole === 'user') {
                             </button>
                         </form>
 
-                        <button class="z-post-action hover:text-sky-500" type="button" title="Share">
-                            <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M18 16.1c-.76 0-1.44.3-1.95.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7.05-4.12A3 3 0 1 0 15 5a3.08 3.08 0 0 0 .05.53L8 9.65a3 3 0 1 0 0 4.7l7.12 4.18A2.77 2.77 0 0 0 15 19a3 3 0 1 0 3-2.9z"/>
-                            </svg>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -249,8 +245,16 @@ if (!$isOwnPost && $currentRole === 'admin' && $targetRole === 'user') {
                 <input type="hidden" name="post_id" value="<?= (int) $post['id'] ?>">
 
                 <div class="flex gap-3">
-                    <div class="w-11 h-11 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center shrink-0">
-                        <span class="font-bold"><?= e(substr($_SESSION['display_name'] ?? 'Z', 0, 1)) ?></span>
+                    <div class="w-11 h-11 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center shrink-0 overflow-hidden">
+                        <?php if (!empty($_SESSION['profile_image'])): ?>
+                            <img
+                                src="<?= e($_SESSION['profile_image']) ?>"
+                                alt="Profile picture"
+                                class="w-full h-full object-cover"
+                            >
+                        <?php else: ?>
+                            <span class="font-bold"><?= e(substr($_SESSION['display_name'] ?? 'Z', 0, 1)) ?></span>
+                        <?php endif; ?>
                     </div>
 
                     <div class="flex-1">
@@ -291,7 +295,15 @@ if (!$isOwnPost && $currentRole === 'admin' && $targetRole === 'user') {
                             href="profile.php?id=<?= (int) $reply['user_id'] ?>"
                             class="w-11 h-11 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center shrink-0 hover:border-sky-500 transition overflow-hidden"
                         >
-                            <span class="font-bold"><?= e(substr($reply['display_name'], 0, 1)) ?></span>
+                            <?php if (!empty($reply['profile_image'])): ?>
+                                <img
+                                    src="<?= e($reply['profile_image']) ?>"
+                                    alt="Profile picture"
+                                    class="w-full h-full object-cover"
+                                >
+                            <?php else: ?>
+                                <span class="font-bold"><?= e(substr($reply['display_name'], 0, 1)) ?></span>
+                            <?php endif; ?>
                         </a>
 
                         <div class="flex-1 min-w-0">

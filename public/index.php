@@ -17,22 +17,25 @@ $posts = getAllPosts($dbconn, (int) $_SESSION['user_id']);
     <main class="min-h-screen lg:ml-72 xl:mr-96 border-x border-neutral-800">
 
         <section class="sticky top-0 z-20 bg-black/80 backdrop-blur border-b border-neutral-800">
-            <div class="grid grid-cols-2 text-center font-bold">
+            <div class="grid grid-cols-1 text-center font-bold">
                 <button class="py-4 border-b-4 border-sky-500">
-                    For you
+                    Feed
                 </button>
-
-                <button class="py-4 text-neutral-400 hover:bg-neutral-900 transition">
-                    Following
-                </button>
-            </div>
         </section>
 
         <section class="border-b border-neutral-800 px-4 py-4">
-            <form action="create_post.php" method="post">
+            <form action="create_post.php" method="post"enctype="multipart/form-data">
                 <div class="flex gap-3">
-                    <div class="w-11 h-11 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center shrink-0">
-                        <span class="font-bold"><?= e(substr($_SESSION['display_name'] ?? 'Z', 0, 1)) ?></span>
+                    <div class="w-11 h-11 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center shrink-0 overflow-hidden">
+                        <?php if (!empty($_SESSION['profile_image'])): ?>
+                            <img
+                                src="<?= e($_SESSION['profile_image']) ?>"
+                                alt="Profile picture"
+                                class="w-full h-full object-cover"
+                            >
+                        <?php else: ?>
+                            <span class="font-bold"><?= e(substr($_SESSION['display_name'] ?? 'Z', 0, 1)) ?></span>
+                        <?php endif; ?>
                     </div>
 
                     <div class="flex-1">
@@ -44,20 +47,39 @@ $posts = getAllPosts($dbconn, (int) $_SESSION['user_id']);
                             class="w-full resize-none bg-black text-white text-xl outline-none placeholder:text-neutral-500"
                             required
                         ></textarea>
+                        
+                        <div id="postImagePreviewWrap" class="hidden relative mt-3 mb-3 max-w-md">
+                            <img
+                                id="postImagePreview"
+                                src=""
+                                alt="Selected image preview"
+                                class="w-full max-h-[320px] object-cover rounded-2xl border border-neutral-800"
+                            >
+
+                            <button
+                                id="removePostImage"
+                                type="button"
+                                class="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/80 border border-neutral-700 text-white font-bold hover:bg-red-500/80 transition"
+                            >
+                                ×
+                            </button>
+                        </div>
 
                         <div class="flex items-center justify-between border-t border-neutral-900 pt-3">
                             <div class="flex gap-4 text-sky-500">
-                                <button type="button" class="z-icon-button" title="Image">
-                                    <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M5 4h14a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2.2l-4.2-4.2a1 1 0 0 0-1.4 0L10 15l-1.7-1.7a1 1 0 0 0-1.4 0L4 16.2V17a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5zm3.5 2.5A1.5 1.5 0 1 1 7 10a1.5 1.5 0 0 1 1.5-1.5z"/>
-                                    </svg>
-                                </button>
+                            <label class="z-icon-button cursor-pointer" title="Image">
+                                <input
+                                    id="postImageInput"
+                                    type="file"
+                                    name="post_image"
+                                    accept="image/jpeg,image/png,image/webp"
+                                    class="hidden"
+                                >
 
-                                <button type="button" class="z-icon-button" title="GIF">
-                                    <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm0 2v10h16V7H4zm3 3h3v1.5H8.5v1H10V14H8.5v1H7v-5zm4.5 0H13v5h-1.5v-5zm3 0H18v1.5h-2v1h1.7V14H16v1h-1.5v-5z"/>
-                                    </svg>
-                                </button>
+                                <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M5 4h14a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2.2l-4.2-4.2a1 1 0 0 0-1.4 0L10 15l-1.7-1.7a1 1 0 0 0-1.4 0L4 16.2V17a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5zm3.5 2.5A1.5 1.5 0 1 1 7 10a1.5 1.5 0 0 1 1.5-1.5z"/>
+                                </svg>
+                            </label>
                             </div>
 
                             <button
@@ -92,12 +114,20 @@ $posts = getAllPosts($dbconn, (int) $_SESSION['user_id']);
                 <article class="border-b border-neutral-800 px-4 py-4 hover:bg-neutral-950 transition">
                     <div class="flex gap-3">
 
-                        <a
-                             href="profile.php?id=<?= (int) $post['user_id'] ?>"
-                             class="w-11 h-11 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center shrink-0 hover:border-sky-500 transition overflow-hidden"
-                        >
-                             <span class="font-bold"><?= e(substr($post['display_name'], 0, 1)) ?></span>
-                        </a>
+                            <a
+                                href="profile.php?id=<?= (int) $post['user_id'] ?>"
+                                class="w-11 h-11 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center shrink-0 hover:border-sky-500 transition overflow-hidden"
+                            >
+                                <?php if (!empty($post['profile_image'])): ?>
+                                    <img
+                                        src="<?= e($post['profile_image']) ?>"
+                                        alt="Profile picture"
+                                        class="w-full h-full object-cover"
+                                    >
+                                <?php else: ?>
+                                    <span class="font-bold"><?= e(substr($post['display_name'], 0, 1)) ?></span>
+                                <?php endif; ?>
+                            </a>
 
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center justify-between gap-3">
@@ -237,20 +267,13 @@ $posts = getAllPosts($dbconn, (int) $_SESSION['user_id']);
                                 >
                             <?php endif; ?>
 
-                            <div class="flex items-center justify-between max-w-md mt-4 text-neutral-500">
+                            <div class="flex items-center gap-8 max-w-md mt-4 text-neutral-500">
                                 <a href="post.php?id=<?= (int) $post['id'] ?>" class="z-post-action hover:text-sky-500" title="Reply">
                                     <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">
                                         <path d="M4 5.5A3.5 3.5 0 0 1 7.5 2h9A3.5 3.5 0 0 1 20 5.5v7A3.5 3.5 0 0 1 16.5 16H9l-4.2 4.2A1 1 0 0 1 3 19.5v-14zm3.5-1.5A1.5 1.5 0 0 0 6 5.5v10.6l2.2-2.2A1 1 0 0 1 8.9 13h7.6A1.5 1.5 0 0 0 18 11.5v-6A1.5 1.5 0 0 0 16.5 4h-9z"/>
                                     </svg>
                                     <span><?= (int) $post['reply_count'] ?></span>
                                 </a>
-
-                                <button class="z-post-action hover:text-green-500" type="button" title="Repost">
-                                    <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M7 7h9.2l-2.1-2.1a1 1 0 0 1 1.4-1.4l3.8 3.8a1 1 0 0 1 0 1.4l-3.8 3.8a1 1 0 0 1-1.4-1.4L16.2 9H7a2 2 0 0 0-2 2v1a1 1 0 1 1-2 0v-1a4 4 0 0 1 4-4zm10 10H7.8l2.1 2.1a1 1 0 0 1-1.4 1.4l-3.8-3.8a1 1 0 0 1 0-1.4l3.8-3.8a1 1 0 0 1 1.4 1.4L7.8 15H17a2 2 0 0 0 2-2v-1a1 1 0 1 1 2 0v1a4 4 0 0 1-4 4z"/>
-                                    </svg>
-                                    <span>0</span>
-                                </button>
 
                             <form action="like_post.php" method="post" class="inline">
                                 <input type="hidden" name="post_id" value="<?= (int) $post['id'] ?>">
@@ -274,11 +297,6 @@ $posts = getAllPosts($dbconn, (int) $_SESSION['user_id']);
                                 </button>
                             </form>
 
-                                <button class="z-post-action hover:text-sky-500" type="button" title="Share">
-                                    <svg class="z-action-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M18 16.1c-.76 0-1.44.3-1.95.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7.05-4.12A3 3 0 1 0 15 5a3.08 3.08 0 0 0 .05.53L8 9.65a3 3 0 1 0 0 4.7l7.12 4.18A2.77 2.77 0 0 0 15 19a3 3 0 1 0 3-2.9z"/>
-                                    </svg>
-                                </button>
                             </div>
                         </div>
                     </div>

@@ -45,6 +45,32 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    const postImageInput = document.getElementById("postImageInput");
+    const postImagePreviewWrap = document.getElementById("postImagePreviewWrap");
+    const postImagePreview = document.getElementById("postImagePreview");
+    const removePostImage = document.getElementById("removePostImage");
+
+    if (postImageInput && postImagePreviewWrap && postImagePreview && removePostImage) {
+        postImageInput.addEventListener("change", () => {
+            const file = postImageInput.files[0];
+
+            if (!file) {
+                postImagePreviewWrap.classList.add("hidden");
+                postImagePreview.src = "";
+                return;
+            }
+
+            postImagePreview.src = URL.createObjectURL(file);
+            postImagePreviewWrap.classList.remove("hidden");
+        });
+
+        removePostImage.addEventListener("click", () => {
+            postImageInput.value = "";
+            postImagePreview.src = "";
+            postImagePreviewWrap.classList.add("hidden");
+        });
+}
+
 const clockCanvas = document.getElementById("zClockCanvas");
 
 if (clockCanvas) {

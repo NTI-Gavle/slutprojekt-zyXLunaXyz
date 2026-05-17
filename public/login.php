@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['username'] = $user['username'];
             $_SESSION['display_name'] = $user['display_name'];
             $_SESSION['role'] = $user['role'];
+            $_SESSION['profile_image'] = $user['profile_image'];
 
             redirect('index.php');
         } else {

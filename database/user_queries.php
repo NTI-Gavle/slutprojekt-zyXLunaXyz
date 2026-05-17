@@ -83,12 +83,14 @@ function getUserStats(PDO $dbconn, int $userId): array
     ];
 }
 
-function updateUserProfile(PDO $dbconn, int $userId, string $displayName, string $bio): bool
+function updateUserProfile(PDO $dbconn, int $userId, string $displayName, string $bio, ?string $profileImage, ?string $bannerImage): bool
 {
     $sql = "
         UPDATE users
         SET display_name = :display_name,
-            bio = :bio
+            bio = :bio,
+            profile_image = COALESCE(:profile_image, profile_image),
+            banner_image = COALESCE(:banner_image, banner_image)
         WHERE id = :user_id
     ";
 
@@ -97,6 +99,8 @@ function updateUserProfile(PDO $dbconn, int $userId, string $displayName, string
     return $stmt->execute([
         ':display_name' => $displayName,
         ':bio' => $bio,
+        ':profile_image' => $profileImage,
+        ':banner_image' => $bannerImage,
         ':user_id' => $userId
     ]);
 }

@@ -16,13 +16,6 @@
             </li>
 
             <li>
-                <a href="chat.php" class="z-nav-link">
-                    <svg class="z-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M4 5a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H9.2l-4.07 3.39A1.3 1.3 0 0 1 3 18.39V5zm3-1a1 1 0 0 0-1 1v11.25L8.22 14.4A2 2 0 0 1 9.5 14H17a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H7z"/>
-                    </svg>
-                    <span>Chat</span>
-                </a>
-            </li>
 
             <li>
                 <a href="profile.php" class="z-nav-link">
@@ -40,7 +33,15 @@
         <a href="profile.php">
         <div class="flex items-center gap-3 mb-4">
             <div class="w-10 h-10 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center overflow-hidden">
-                <span class="font-bold"><?= e(substr($_SESSION['display_name'] ?? 'Z', 0, 1)) ?></span>
+                <?php if (!empty($_SESSION['profile_image'])): ?>
+                    <img
+                        src="<?= e($_SESSION['profile_image']) ?>"
+                        alt="Profile picture"
+                        class="w-full h-full object-cover"
+                    >
+                <?php else: ?>
+                    <span class="font-bold"><?= e(substr($_SESSION['display_name'] ?? 'Z', 0, 1)) ?></span>
+                <?php endif; ?>
             </div>
 
                 <div class="min-w-0 flex-1">
@@ -71,19 +72,11 @@
 </nav>
 
 <nav class="lg:hidden fixed bottom-0 left-0 right-0 border-t border-neutral-800 bg-black z-50">
-    <ul class="grid grid-cols-3 text-center">
+    <ul class="grid grid-cols-2 text-center">
         <li>
             <a href="index.php" class="z-mobile-nav-link">
                 <svg class="z-mobile-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M3 10.75L12 3l9 7.75V21a1 1 0 0 1-1 1h-5.5a1 1 0 0 1-1-1v-5.5h-3V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V10.75z"/>
-                </svg>
-            </a>
-        </li>
-
-        <li>
-            <a href="chat.php" class="z-mobile-nav-link">
-                <svg class="z-mobile-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M4 5a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H9.2l-4.07 3.39A1.3 1.3 0 0 1 3 18.39V5zm3-1a1 1 0 0 0-1 1v11.25L8.22 14.4A2 2 0 0 1 9.5 14H17a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H7z"/>
                 </svg>
             </a>
         </li>

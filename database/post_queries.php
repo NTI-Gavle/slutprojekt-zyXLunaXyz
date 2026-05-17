@@ -2,29 +2,76 @@
 
 require_once __DIR__ . '/db.php';
 
-function createPost(PDO $dbconn, int $userId, string $content): bool
+function createPost(PDO $dbconn, int $userId, string $content, ?string $imageUrl = null): bool
 {
-    $sql = "INSERT INTO posts (user_id, content)
-            VALUES (:user_id, :content)";
+    $sql = "INSERT INTO posts (user_id, content, image_url)
+            VALUES (:user_id, :content, :image_url)";
 
     $stmt = $dbconn->prepare($sql);
 
     return $stmt->execute([
         ':user_id' => $userId,
-        ':content' => $content
+        ':content' => $content,
+        ':image_url' => $imageUrl
     ]);
 }
-
-function createPostAndGetId(PDO $dbconn, int $userId, string $content): int
+function getPostsByUserId(PDO $dbconn, int $profileUserId, int $currentUserId): array
 {
-    $sql = "INSERT INTO posts (user_id, content)
-            VALUES (:user_id, :content)";
+    $sql = "
+        SELECT
+            posts.id,
+            posts.user_id,
+            posts.content,
+            posts.image_url,
+            posts.created_at,
+            users.username,
+            users.display_name,
+            users.profile_image,
+            users.role,
+            COUNT(DISTINCT likes.id) AS like_count,
+            COUNT(DISTINCT replies.id) AS reply_count,
+            MAX(CASE WHEN user_likes.user_id IS NOT NULL THEN 1 ELSE 0 END) AS liked_by_current_user
+        FROM posts
+        INNER JOIN users ON posts.user_id = users.id
+        LEFT JOIN likes ON posts.id = likes.post_id
+        LEFT JOIN replies ON posts.id = replies.post_id
+        LEFT JOIN likes AS user_likes
+            ON posts.id = user_likes.post_id
+            AND user_likes.user_id = :current_user_id
+        WHERE posts.user_id = :profile_user_id
+        GROUP BY
+            posts.id,
+            posts.user_id,
+            posts.content,
+            posts.image_url,
+            posts.created_at,
+            users.username,
+            users.display_name,
+            users.profile_image,
+            users.role
+        ORDER BY posts.created_at DESC
+    ";
+
+    $stmt = $dbconn->prepare($sql);
+    $stmt->execute([
+        ':profile_user_id' => $profileUserId,
+        ':current_user_id' => $currentUserId
+    ]);
+
+    return $stmt->fetchAll();
+}
+
+function createPostAndGetId(PDO $dbconn, int $userId, string $content, ?string $imageUrl = null): int
+{
+    $sql = "INSERT INTO posts (user_id, content, image_url)
+            VALUES (:user_id, :content, :image_url)";
 
     $stmt = $dbconn->prepare($sql);
 
     $stmt->execute([
         ':user_id' => $userId,
-        ':content' => $content
+        ':content' => $content,
+        ':image_url' => $imageUrl
     ]);
 
     return (int) $dbconn->lastInsertId();
