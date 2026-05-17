@@ -1,62 +1,257 @@
-/* Header */
-.site-header {
-    background-color: #333;
-    color: #fff;
-    padding: 15px 0;
+:root {
+    --z-white: #ffffff;
+    --z-black: #000000;
+    --z-blue: #1D9BF0;
+    --z-discord: #5865F2;
+    --z-border: #2f3336;
+    --z-OWNER: #80091b;
+}
+* {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
-.header-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+*::-webkit-scrollbar {
+    display: none;
 }
 
-.site-title a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1.5em;
+* {
+    box-sizing: border-box;
 }
 
-/* Navigation */
-.site-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 15px;
+html,
+body{
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+body {
+    background-color: var(--z-black);
+    color: var(--z-white);
     margin: 0;
-    padding: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
+}
+.z-logo-font{
+    font-family: "Jacques Francois Shadow", serif;
 }
 
-.site-nav a {
-    color: #fff;
-    text-decoration: none;
+.z-input {
+    width: 100%;
+    border-radius: 9999px;
+    border: 1px solid rgb(64 64 64);
+    background-color: #000000;
+    color: #ffffff;
+    padding: 0.9rem 1rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.site-nav a:hover {
-    color: #FFD700; /* Optional hover effect */
+.z-input:focus {
+    border-color: var(--z-blue);
+    box-shadow: 0 0 0 1px var(--z-blue);
 }
 
-/* Main content */
-.main-content {
-    max-width: 1000px;
-    margin: 20px auto;
+.z-auth-card {
+    border: 1px solid #202327;
+    background: #000000;
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.02);
 }
 
-/* Footer */
-.site-footer {
-    text-align: center;
-    padding: 20px;
-    background-color: #f0f0f0;
-    margin-top: 40px;
+.z-auth-button {
+    width: 100%;
+    border-radius: 9999px;
+    padding: 0.85rem 1rem;
+    font-weight: 700;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    animation: dropdownFade 0.2s ease;
 }
 
-.site-footer a {
-    color: #333;
-    text-decoration: none;
-    margin: 0 5px;
+.z-auth-button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
 }
 
-.site-footer a:hover {
-    text-decoration: underline;
+@keyframes dropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.z-discord-icon {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+}
+
+.z-nav-link{
+    display: flex;
+    align-items: center;
+      gap: 1rem;
+    border-radius: 9999px;
+    padding: 0.8rem 1rem;
+    transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.z-nav-link:hover {
+    background-color: #111111;
+    transform: translateY(-1px);
+    color: var(--z-blue);
+}
+
+.z-nav-icon {
+    width: 1.65rem;
+    height: 1.65rem;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+.z-mobile-nav-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0;
+    color: white;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.z-mobile-nav-link:hover {
+    color: var(--z-blue);
+    background-color: #111111;
+}
+
+.z-mobile-nav-icon {
+    width: 1.6rem;
+    height: 1.6rem;
+    fill: currentColor;
+}
+
+.z-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: currentColor;
+    border-radius: 9999px;
+    padding: 0.45rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.z-icon-button:hover {
+    background-color: rgba(29, 155, 240, 0.12);
+    color: var(--z-blue);
+}
+
+.z-post-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.z-post-menu-button {
+    color: #737373;
+    border-radius: 9999px;
+    padding: 0.35rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.z-post-menu-button:hover {
+    color: white;
+    background-color: #111111;
+}
+
+.z-action-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+.z-action-icon-small {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+.z-post-menu-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: left;
+    transition: background-color 0.2s ease;
+}
+
+.z-post-menu-item svg {
+    fill: currentColor;
+}
+
+.z-admin-rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background-color: var(--z-discord);
+    color: var(--z-black);
+    border:var(--z-blue);
+    padding: 0.1rem 0.45rem;
+    font-size: 0.62rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+}
+
+.z-admin-rank-nav {
+    margin-top: 0.4rem;
+    transform: translateY(-2px);
+}
+
+.z-post-liked {
+    color: #ef4444;
+}
+
+.z-post-liked:hover {
+    color: #f87171;
+}
+
+.z-owner-rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: var(--z-OWNER);
+    color: #000000;
+    padding: 0.1rem 0.45rem;
+    font-size: 0.62rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+}
+#zClockCanvas {
+    display: block;
+    width: 100%;
+    max-width: 260px;
+    margin: 0 auto 1rem auto;
+    border-radius: 24px;
+    background-color: #000000;
+    padding: 0.5rem;
 }

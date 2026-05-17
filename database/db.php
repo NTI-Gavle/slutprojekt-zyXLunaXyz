@@ -5,9 +5,8 @@ require_once __DIR__ . '/../config/env.php';
 $env = loadEnv(__DIR__ . '/../.env');
 
 
-$dbname = 'Your_DB_Name';
-$hostname = 'localhost';
-
+$dbname = $env['DB_NAME'] ?? 'z_social';
+$hostname = $env['DB_HOST'] ?? 'localhost';
 $DB_USER = $env['DB_USER'] ?? 'root';
 $DB_PASSWORD = $env['DB_PASS']?? 'root';
 
@@ -17,8 +16,9 @@ try {
         $DB_USER,
         $DB_PASSWORD
     );
-    echo 'Connected to database'; // Remove after it works
+    
     $dbconn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $dbconn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 }
 catch(PDOException $e){
     echo 'Connection failed: ' . $e->getMessage();
